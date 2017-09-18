@@ -19,4 +19,7 @@ public class TwitterAlertController {
     public String sayHello(@PathVariable("user") String user) {
         return "hello " + user;
     }
+
+
 }
+
