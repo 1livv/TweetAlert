@@ -1,6 +1,7 @@
 package com.livv.TwitterAlert;
 
 import com.twitter.hbc.core.Client;
+import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +10,8 @@ import java.util.concurrent.TimeUnit;
  * Created by gheorghe on 18/09/2017.
  */
 public class TweetConsumer implements Runnable {
+
+    private static Logger log = Logger.getLogger(TweetConsumer.class);
 
     private Client client;
 
@@ -33,15 +36,18 @@ public class TweetConsumer implements Runnable {
                 tweet = msgQueue.poll(500, TimeUnit.MILLISECONDS);
                 if (tweet != null) {
                     //send notification
+                    log.info("got tweet:" + tweet);
                 }
             }
             catch(InterruptedException e) {
-                //log.error("the queue was intrreputed ")
+                log.error("the queue was intrreputed ");
             }
         }
 
+        log.info("client done emptying queue");
         while((tweet = msgQueue.poll()) != null) {
             //send notification here
+            log.info("got tweet:" + tweet);
         }
     }
 }

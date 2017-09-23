@@ -6,6 +6,7 @@ import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,8 @@ public class TwitterPoller {
 
     private Thread consumerThread;
 
+    private static Logger log = Logger.getLogger(TwitterPoller.class);
+
     @Autowired
     public void setConfig(Config config) {
         this.config = config;
@@ -62,6 +65,8 @@ public class TwitterPoller {
     }
 
     public boolean addToFollow(List<Long> usersId) {
+
+        log.info("adding " + usersId.toString() + " to the list");
         Client newClient = null;
         try {
             toFollow.addAll(usersId);
@@ -72,13 +77,14 @@ public class TwitterPoller {
             newClient = getClient();
         }
         catch(Exception e) {
-            //log.error("failed to restart clients");
+            log.error("failed to restart clients");
             client.reconnect();
             startConsumer();
             return false;
         }
 
         if (newClient != null) {
+            log.warn("restart succesfull");
             client = newClient;
             client.connect();
             startConsumer();
@@ -100,7 +106,7 @@ public class TwitterPoller {
 
     private void startConsumer() {
         tweetConsumer = new TweetConsumer().withClient(client).withMsgQueue(msgQueue);
-        consumerThread  = new Thread(new TweetConsumer());
+        consumerThread  = new Thread(tweetConsumer);
         consumerThread.start();
     }
 }

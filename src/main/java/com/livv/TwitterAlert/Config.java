@@ -3,14 +3,15 @@ package com.livv.TwitterAlert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Created by gheorghe on 18/09/2017.
  */
+@Service
 @PropertySource("classpath:default.properties")
 public class Config {
 

@@ -20,3 +20,29 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/src/main/resources/default.properties
+/TweetAlert.iml
+/.idea/
+.idea/artifacts/
+.idea/compiler.xml
+.idea/libraries/Maven__com_google_code_findbugs_jsr305_1_3_9.xml
+.idea/libraries/Maven__com_google_guava_guava_14_0_1.xml
+.idea/libraries/Maven__com_twitter_hbc_core_2_2_0.xml
+.idea/libraries/Maven__com_twitter_hbc_twitter4j_2_2_0.xml
+.idea/libraries/Maven__com_twitter_joauth_6_0_2.xml
+.idea/libraries/Maven__commons_codec_commons_codec_1_6.xml
+.idea/libraries/Maven__commons_logging_commons_logging_1_2.xml
+.idea/libraries/Maven__javax_servlet_javax_servlet_api_3_1_0.xml
+.idea/libraries/Maven__junit_junit_3_8_1.xml
+.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_2_5.xml
+.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_2_4.xml
+.idea/libraries/Maven__org_slf4j_slf4j_api_1_6_6.xml
+.idea/libraries/Maven__org_twitter4j_twitter4j_core_4_0_1.xml
+.idea/libraries/Maven__org_twitter4j_twitter4j_stream_4_0_1.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+.idea/workspace.xml
+add.sh
+src/main/resources/
