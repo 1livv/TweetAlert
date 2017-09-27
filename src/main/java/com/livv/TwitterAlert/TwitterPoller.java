@@ -41,17 +41,25 @@ public class TwitterPoller {
 
     private static Logger log = Logger.getLogger(TwitterPoller.class);
 
+    private FolloweeService followeeService;
+
+    private NotificationPool notificationPool;
+
     @Autowired
     public void setConfig(Config config) {
         this.config = config;
     }
+
+    @Autowired
+    public void setFolloweeService(FolloweeService followeeService) { this.followeeService = followeeService; }
 
     @PostConstruct
     public void postConstruct() {
         msgQueue = new LinkedBlockingQueue<String>(
                 Integer.parseInt(config.getProperty("talert.messageQueue.size")));
 
-        toFollow = config.getPropertyAsList("talert.toFollowList", (x) -> Long.parseLong(x));
+        //toFollow = config.getPropertyAsList("talert.toFollowList", (x) -> Long.parseLong(x));
+        toFollow = followeeService.listIds();
 
         hosts = new HttpHosts(Constants.STREAM_HOST);
         hosebirdEndpoint = new StatusesFilterEndpoint();
@@ -61,18 +69,24 @@ public class TwitterPoller {
                 config.getProperty("talert.consumer.token"), config.getProperty("talert.consumer.tokenSecret"));
         client = getClient();
         client.connect();
+
+        int noThreads = Integer.parseInt(config.getProperty("talert.notificationPool.threads"));
+        int queueSize = Integer.parseInt(config.getProperty("talert.notificationPool.queueSize"));
+        long timeout = Long.parseLong(config.getProperty("talert.notificationPool.timeout"));
+        notificationPool = new NotificationPool(noThreads, queueSize, timeout);
+
         startConsumer();
     }
 
-    public boolean addToFollow(List<Long> usersId) {
+    public boolean addToFollow(Long userId) {
 
-        log.info("adding " + usersId.toString() + " to the list");
+        log.info("adding " + userId.toString() + " to the list");
         Client newClient = null;
         try {
-            toFollow.addAll(usersId);
+            toFollow.add(userId);
             client.stop();
 
-            //this might lose message !!!!!!!*/
+            //this might lose messages!!!!!!!*/
             consumerThread.join();
             newClient = getClient();
         }
@@ -105,7 +119,8 @@ public class TwitterPoller {
     }
 
     private void startConsumer() {
-        tweetConsumer = new TweetConsumer().withClient(client).withMsgQueue(msgQueue);
+        tweetConsumer = new TweetConsumer().withClient(client).withMsgQueue(msgQueue)
+                .withPool(notificationPool);
         consumerThread  = new Thread(tweetConsumer);
         consumerThread.start();
     }

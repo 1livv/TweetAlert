@@ -3,12 +3,12 @@ package com.livv.TwitterAlert;
 /**
  * Created by gheorghe on 18/09/2017.
  */
-public class AddUserReq {
+public class AddFollowReq {
 
     /*replace this with user name*/
     private Long userID;
 
-    public AddUserReq() {
+    public AddFollowReq() {
 
     }
 

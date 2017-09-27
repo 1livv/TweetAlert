@@ -114,6 +114,12 @@
           <version>7.0.55</version>
       </dependency>
 
+      <dependency>
+          <groupId>com.googlecode.libphonenumber</groupId>
+          <artifactId>libphonenumber</artifactId>
+          <version>8.6.0</version>
+      </dependency>
+
 
   </dependencies>
   <build>

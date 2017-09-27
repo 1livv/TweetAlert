@@ -19,6 +19,8 @@ public class User {
 
     private Timestamp dateJoined;
 
+    UserStatus userStatus;
+
     @Id
     @Column(name = "user_name")
     public String getUserName() {
@@ -46,4 +48,14 @@ public class User {
     public void setDateJoined(Timestamp dateJoined) {
         this.dateJoined = dateJoined;
     }
+
+    @Column(name = "user_status")
+    public UserStatus getUserStatus() { return userStatus; }
+
+    public void setUserStatus(UserStatus userStatus) { this.userStatus = userStatus; }
+}
+
+enum UserStatus {
+    PENDING,
+    ACTIVE
 }
