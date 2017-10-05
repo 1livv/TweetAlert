@@ -58,7 +58,6 @@ public class TwitterPoller {
         msgQueue = new LinkedBlockingQueue<String>(
                 Integer.parseInt(config.getProperty("talert.messageQueue.size")));
 
-        //toFollow = config.getPropertyAsList("talert.toFollowList", (x) -> Long.parseLong(x));
         toFollow = followeeService.listIds();
 
         hosts = new HttpHosts(Constants.STREAM_HOST);
@@ -119,8 +118,8 @@ public class TwitterPoller {
     }
 
     private void startConsumer() {
-        tweetConsumer = new TweetConsumer().withClient(client).withMsgQueue(msgQueue)
-                .withPool(notificationPool);
+        tweetConsumer = new TweetConsumer(config).withClient(client).withMsgQueue(msgQueue)
+                .withPool(notificationPool).withFolloweeService(followeeService);
         consumerThread  = new Thread(tweetConsumer);
         consumerThread.start();
     }

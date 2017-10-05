@@ -20,6 +20,6 @@ public class NotificationRunner implements Runnable {
     }
 
     public void run() {
-        notificationSender.sendNotification(status.toString(), phoneNumber);
+        notificationSender.sendNotification(status.getText(), phoneNumber);
     }
 }

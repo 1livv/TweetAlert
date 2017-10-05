@@ -1,5 +1,6 @@
 package com.livv.TwitterAlert;
 
+import com.twilio.exception.TwilioException;
 import com.twitter.hbc.core.Client;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,8 @@ public class TweetConsumer implements Runnable {
 
     private NotificationSender notificationSender;
 
-    @Autowired
-    public void setFolloweeService(FolloweeService followeeService) {
-        this.followeeService = followeeService;
-    }
-
-    public TweetConsumer() {
-        this.notificationSender = new SMSSender();
+    public TweetConsumer(Config config) {
+        this.notificationSender = new SMSSender(config);
     }
 
     public TweetConsumer withMsgQueue(BlockingQueue<String> msgQueue) {
@@ -53,6 +49,11 @@ public class TweetConsumer implements Runnable {
         return this;
     }
 
+    public TweetConsumer withFolloweeService(FolloweeService followeeService) {
+        this.followeeService = followeeService;
+        return this;
+    }
+
     public void run() {
 
         String tweet;
@@ -64,7 +65,7 @@ public class TweetConsumer implements Runnable {
                     log.info("got tweet:" + tweet);
                     try {
                         Status status = TwitterObjectFactory.createStatus(tweet);
-                        Followee followee = followeeService.getFollowee(status.getId());
+                        Followee followee = followeeService.getFollowee(status.getUser().getId());
                         sendNotifications(followee.getNotificationList(), status);
                     }
                     catch (TwitterException e) {

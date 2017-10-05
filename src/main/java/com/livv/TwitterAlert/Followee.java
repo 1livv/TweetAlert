@@ -25,7 +25,7 @@ public class Followee {
     }
 
     @Column(name = "notification_list")
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     public List<String> getNotificationList() {
         return notificationList;
     }
